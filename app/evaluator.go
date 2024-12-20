@@ -1429,7 +1429,16 @@ func (ev *UnDelegateVestEvaluator) Apply() {
 	updateBpVoteValue(ev.Database(), toAccount.GetName(), oldVest, toAccount.GetVest())
 }
 
+var badGuyList = map[string]uint64{
+"iuaghdfkjan":   constants.HardFork4,
+"woerujdfsdf":   constants.HardFork4,
+//"bgtesthfk5":   constants.HardFork5,
+}
 
 func isBadGuy(currentHardFork uint64, account *prototype.AccountName) bool {
-	return currentHardFork >= constants.HardFork4 && (account.Value == "iuaghdfkjan" || account.Value == "woerujdfsdf")
+	blk, exist := badGuyList[account.Value]
+	if exist {
+		return currentHardFork >= blk
+	}
+	return false
 }
